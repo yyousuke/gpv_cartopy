@@ -1,9 +1,11 @@
+# gpv_cartopy
 
 ./main.py：手動でpython以下の全プログラムを実行する場合
 
 ./main_auto.py：crontabに登録した場合など。自動でpython以下の全プログラムを実行する場合(5時間前の予報時刻のデータを取得)
 
 
+以下のファイルは個別実行も可能
 ./python/*.py
 --fcst_date 予報時刻
 --sta 作図する地域

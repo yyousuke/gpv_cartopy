@@ -17,7 +17,7 @@ stations_tvar = ["Tokyo"]
 progs_tvar = [
     "python/readgrib_msm_tvar_reg.py", "python/readgrib_gsm_tvar_reg.py"
 ]
-times_tvar = [36, 72]
+times_tvar = ["36", "72"]
 
 if __name__ == '__main__':
     # 5時間前に設定

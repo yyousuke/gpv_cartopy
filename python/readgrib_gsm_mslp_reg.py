@@ -34,15 +34,15 @@ def plotmap(fcst_time, sta, lons, lats, mslp, rain, tmp, uwnd, vwnd, title,
     lat_min = region.lat_min
     lat_max = region.lat_max
     if sta == "Japan":
-        opt_c1 = False    # 1hPaの等圧線を描かない
-        opt_barbs = False # 矢羽を描かない
-        bstp = 6          # 矢羽を何個飛ばしに描くか
-        cstp = 2          # 等値線ラベルを何個飛ばしに付けるか
+        opt_c1 = False  # 1hPaの等圧線を描かない
+        opt_barbs = False  # 矢羽を描かない
+        bstp = 6  # 矢羽を何個飛ばしに描くか
+        cstp = 1  # 等値線ラベルを何個飛ばしに付けるか
     else:
-        opt_c1 = True     # 1hPaの等圧線を描く
-        opt_barbs = False # 矢羽を描かない
-        bstp = 1          # 矢羽を何個飛ばしに描くか
-        cstp = 1          # 等値線ラベルを何個飛ばしに付けるか
+        opt_c1 = True  # 1hPaの等圧線を描く
+        opt_barbs = False  # 矢羽を描かない
+        bstp = 1  # 矢羽を何個飛ばしに描くか
+        cstp = 2  # 等値線ラベルを何個飛ばしに付けるか
 
     # マップを作成
     fig = plt.figure(figsize=(10, 10))
@@ -69,7 +69,7 @@ def plotmap(fcst_time, sta, lons, lats, mslp, rain, tmp, uwnd, vwnd, title,
     #
     if opt_c1:
         # 等圧線をひく間隔(1hPaごと)をlevelsにリストとして入れる
-        levels1 = range(math.floor(mslp.min() - math.fmod(mslp.min(), 1)),
+        levels1 = range(math.floor(mslp.min() - math.fmod(mslp.min(), 2)),
                         math.ceil(mslp.max()) + 1, 1)
         # 等圧線をひく
         cr1 = ax.contour(lons,
@@ -77,22 +77,23 @@ def plotmap(fcst_time, sta, lons, lats, mslp, rain, tmp, uwnd, vwnd, title,
                          mslp,
                          levels=levels1,
                          colors='k',
-                         linestyles=':',
+                         linestyles=['-', ':'],
                          linewidths=1.2)
         # ラベルを付ける
-        cr1.clabel(cr1.levels[::cstp * 2], fontsize=12, fmt="%d")
-    # 等圧線をひく間隔(2hPaごと)をlevelsにリストとして入れる
-    levels2 = range(math.floor(mslp.min() - math.fmod(mslp.min(), 2)),
-                    math.ceil(mslp.max()) + 1, 2)
-    # 等圧線をひく
-    cr2 = ax.contour(lons,
-                     lats,
-                     mslp,
-                     levels=levels2,
-                     colors='k',
-                     linewidths=1.2)
-    # ラベルを付ける
-    cr2.clabel(cr2.levels[::cstp], fontsize=12, fmt="%d")
+        cr1.clabel(cr1.levels[::cstp], fontsize=12, fmt="%d")
+    else:
+        # 等圧線をひく間隔(2hPaごと)をlevelsにリストとして入れる
+        levels2 = range(math.floor(mslp.min() - math.fmod(mslp.min(), 2)),
+                        math.ceil(mslp.max()) + 1, 2)
+        # 等圧線をひく
+        cr2 = ax.contour(lons,
+                         lats,
+                         mslp,
+                         levels=levels2,
+                         colors='k',
+                         linewidths=1.2)
+        # ラベルを付ける
+        cr2.clabel(cr2.levels[::cstp], fontsize=12, fmt="%d")
     #
     #
     if opt_stmp:
@@ -150,9 +151,8 @@ def plotmap(fcst_time, sta, lons, lats, mslp, rain, tmp, uwnd, vwnd, title,
     plt.savefig(output_filename, dpi=300, bbox_inches='tight')
     plt.close()
 
+
 ### End Map Prog ###
-
-
 
 if __name__ == '__main__':
     # オプションの読み込み
@@ -164,7 +164,7 @@ if __name__ == '__main__':
     # 予報時刻からの経過時間（１時間毎に指定可能）
     fcst_end = args.fcst_time
     fcst_str = 0  # 開始時刻
-    fcst_step = 1 # 作図する間隔 
+    fcst_step = 1  # 作図する間隔
     # datetimeに変換
     tinfo = pd.to_datetime(fcst_date)
     #

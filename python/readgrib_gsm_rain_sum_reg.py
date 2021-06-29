@@ -17,7 +17,6 @@ from utils import parse_command
 from utils import post
 import utils.common
 
-
 ### Start Map Prog ###
 
 
@@ -33,11 +32,11 @@ def plotmap(sta, lons, lats, mslp, rain, title, output_filename):
     lat_min = region.lat_min
     lat_max = region.lat_max
     if sta == "Japan":
-        opt_c1 = False    # 1hPaの等圧線を描かない
-        cstp = 2          # 等値線ラベルを何個飛ばしに付けるか
+        opt_c1 = False  # 1hPaの等圧線を描かない
+        cstp = 1  # 等値線ラベルを何個飛ばしに付けるか
     else:
-        opt_c1 = False    # 1hPaの等圧線を描かない
-        cstp = 1          # 等値線ラベルを何個飛ばしに付けるか
+        opt_c1 = False  # 1hPaの等圧線を描かない
+        cstp = 2  # 等値線ラベルを何個飛ばしに付けるか
 
     # マップを作成
     fig = plt.figure(figsize=(10, 10))
@@ -64,7 +63,7 @@ def plotmap(sta, lons, lats, mslp, rain, title, output_filename):
     #
     if opt_c1:
         # 等圧線をひく間隔(1hPaごと)をlevelsにリストとして入れる
-        levels1 = range(math.floor(mslp.min() - math.fmod(mslp.min(), 1)),
+        levels1 = range(math.floor(mslp.min() - math.fmod(mslp.min(), 2)),
                         math.ceil(mslp.max()) + 1, 1)
         # 等圧線をひく
         cr1 = ax.contour(lons,
@@ -72,22 +71,23 @@ def plotmap(sta, lons, lats, mslp, rain, title, output_filename):
                          mslp,
                          levels=levels1,
                          colors='k',
-                         linestyles=':',
+                         linestyles=['-', ':'],
                          linewidths=1.2)
         # ラベルを付ける
-        cr1.clabel(cr1.levels[::cstp * 2], fontsize=12, fmt="%d")
-    # 等圧線をひく間隔(2hPaごと)をlevelsにリストとして入れる
-    levels2 = range(math.floor(mslp.min() - math.fmod(mslp.min(), 2)),
-                    math.ceil(mslp.max()) + 1, 2)
-    # 等圧線をひく
-    cr2 = ax.contour(lons,
-                     lats,
-                     mslp,
-                     levels=levels2,
-                     colors='k',
-                     linewidths=1.2)
-    # ラベルを付ける
-    cr2.clabel(cr2.levels[::cstp], fontsize=12, fmt="%d")
+        cr1.clabel(cr1.levels[::cstp], fontsize=12, fmt="%d")
+    else:
+        # 等圧線をひく間隔(2hPaごと)をlevelsにリストとして入れる
+        levels2 = range(math.floor(mslp.min() - math.fmod(mslp.min(), 2)),
+                        math.ceil(mslp.max()) + 1, 2)
+        # 等圧線をひく
+        cr2 = ax.contour(lons,
+                         lats,
+                         mslp,
+                         levels=levels2,
+                         colors='k',
+                         linewidths=1.2)
+        # ラベルを付ける
+        cr2.clabel(cr2.levels[::cstp], fontsize=12, fmt="%d")
     #
     #
     cutils = ColUtils('wysiwyg')  # 色テーブルの選択
@@ -138,15 +138,17 @@ if __name__ == '__main__':
     lons_1d, lats_1d, lons, lats = gsm.readnetcdf()
     # 変数取り出し
     # 海面更生気圧を二次元のndarrayで取り出す
-    mslp = gsm.ret_var("PRMSL_meansealevel", fact=0.01) # (hPa)
+    mslp = gsm.ret_var("PRMSL_meansealevel", fact=0.01)  # (hPa)
     # 累積降水量を二次元のndarrayで取り出す
-    rain = gsm.ret_var("APCP_surface", cum_rain=True) # (mm/h)
+    rain = gsm.ret_var("APCP_surface", cum_rain=True)  # (mm/h)
     # ファイルを閉じる
     gsm.close_netcdf()
     #
     # タイトルの設定
-    title = tlab + " GSM forecast, +" + "0-" + str(fcst_time) + "h rain & +"  + str(fcst_time) + "h SLP"
+    title = tlab + " GSM forecast, +" + "0-" + str(
+        fcst_time) + "h rain & +" + str(fcst_time) + "h SLP"
     # 出力ファイル名の設定
-    output_filename = "map_gsm_rain_sum" + "0-" + str(fcst_time) + "_" + sta + ".png"
+    output_filename = "map_gsm_rain_sum" + "0-" + str(
+        fcst_time) + "_" + sta + ".png"
     # 作図
     plotmap(sta, lons, lats, mslp, rain, title, output_filename)

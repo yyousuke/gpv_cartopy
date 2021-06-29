@@ -34,11 +34,11 @@ def plotmap(fcst_time, sta, lons, lats, z50, the85, the50, dthdz, title,
     if sta == "Japan":
         opt_barbs = True  # 矢羽を描く
         bstp = 10  # 矢羽を何個飛ばしに描くか
-        cstp = 2  # 等値線ラベルを何個飛ばしに付けるか
+        cstp = 5  # 等値線ラベルを何個飛ばしに付けるか
     else:
         opt_barbs = True  # 矢羽を描く
         bstp = 1  # 矢羽を何個飛ばしに描くか
-        cstp = 1  # 等値線ラベルを何個飛ばしに付けるか
+        cstp = 5  # 等値線ラベルを何個飛ばしに付けるか
 
     # マップを作成
     fig = plt.figure(figsize=(10, 10))
@@ -66,50 +66,34 @@ def plotmap(fcst_time, sta, lons, lats, z50, the85, the50, dthdz, title,
     # 850 hPa等相当温位線
     # 等相当温位線を描く値のリスト
     # 3Kごとに等値線を描く、15Kごとにラベルを付ける
-    levels_tc = range(210, 390, 3)
-    levels_ta = range(210, 390, 15)
+    levels_t = range(210, 390, 3)
     # 等温位線をひく
     cr1 = ax.contour(lons,
                      lats,
                      the85,
-                     levels=levels_tc,
+                     levels=levels_t,
                      colors='k',
-                     linewidths=0.8)
-    cr2 = ax.contour(lons,
-                     lats,
-                     the85,
-                     levels=levels_ta,
-                     colors='k',
-                     linewidths=1.2)
-    clevels = cr1.levels  # 細実線を描いた値
+                     linewidths=[1.2, 0.8, 0.8, 0.8, 0.8])
     # ラベルを付ける
     try:
-        cr1.clabel(cr1.levels[::cstp * 5], fontsize=12, fmt="%d")  # 細実線ラベル
-        cr2.clabel(cr2.levels[::cstp], fontsize=12, fmt="%d")  # 太実線ラベル
+        cr1.clabel(cr1.levels[::cstp], fontsize=12, fmt="%d")  # ラベル
     except Exception as e:
         print(str(e))
     #
     # 500 hPa ジオポテンシャル高度
     # 等高線を描く値のリスト
-    levels_zc = range(4800, 6000, 60)
-    levels_za = [4800, 5100, 5400, 5700, 6000]
+    # 60mごとに等値線を描く、300mごとにラベルを付ける
+    levels_z = range(4800, 6000, 60)
     # 等高線を描く
-    cr3 = ax.contour(lons,
+    cr2 = ax.contour(lons,
                      lats,
                      z50,
-                     levels=levels_zc,
+                     levels=levels_z,
                      colors='gray',
-                     linewidths=0.8)
-    cr4 = ax.contour(lons,
-                     lats,
-                     z50,
-                     levels=levels_za,
-                     colors='gray',
-                     linewidths=1.2)
+                     linewidths=[1.2, 0.8, 0.8, 0.8, 0.8])
     # ラベルを付ける
     try:
-        cr3.clabel(cr3.levels[::cstp * 5], fontsize=12, fmt="%d")  # 細実線ラベル
-        cr4.clabel(cr4.levels[::cstp], fontsize=12, fmt="%d")  # 太実線ラベル
+        cr2.clabel(cr2.levels[::cstp], fontsize=12, fmt="%d")  # ラベル
     except Exception as e:
         print(str(e))
     #

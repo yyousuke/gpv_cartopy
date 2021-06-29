@@ -15,8 +15,6 @@ from utils import parse_command
 from utils import post
 import utils.common
 
-opt_stmp = False  # 等温線を引く（-2、2℃）
-
 ### Start Map Prog ###
 
 
@@ -36,12 +34,12 @@ def plotmap(fcst_time, sta, lons, lats, uwnd, vwnd, tmp, rh, title,
         opt_c1 = False  # 1度の等温線を描かない
         opt_barbs = True  # 矢羽を描く
         bstp = 10  # 矢羽を何個飛ばしに描くか
-        cstp = 2  # 等値線ラベルを何個飛ばしに付けるか
+        cstp = 1  # 等値線ラベルを何個飛ばしに付けるか
     else:
         opt_c1 = True  # 1度の等温線を描く
         opt_barbs = True  # 矢羽を描く
         bstp = 1  # 矢羽を何個飛ばしに描くか
-        cstp = 1  # 等値線ラベルを何個飛ばしに付けるか
+        cstp = 3  # 等値線ラベルを何個飛ばしに付けるか
 
     # マップを作成
     fig = plt.figure(figsize=(10, 10))
@@ -77,22 +75,23 @@ def plotmap(fcst_time, sta, lons, lats, uwnd, vwnd, tmp, rh, title,
                          tmp,
                          levels=levels1,
                          colors='k',
-                         linestyles=':',
-                         linewidths=0.8)
+                         linestyles=['-', ':', ':'],
+                         linewidths=[1.8, 1.2, 1.2])
+        # ラベルを付ける（3Kごと）
+        cr1.clabel(cr1.levels[::cstp], fontsize=12, fmt="%d")
+    else:
+        # 等温線を描く値のリスト（3Kごと）
+        levels_t = np.arange(-60, 61, 3)
+        # 等温線を描く
+        cr2 = ax.contour(lons,
+                         lats,
+                         tmp,
+                         levels=levels_t,
+                         colors='k',
+                         linestyles='-',
+                         linewidths=1.8)
         # ラベルを付ける
-        cr1.clabel(cr1.levels[::cstp * 3], fontsize=12, fmt="%d")
-    # 等温線を描く値のリスト
-    levels_t = np.arange(-60, 61, 3)
-    # 等温線を描く
-    cr2 = ax.contour(lons,
-                     lats,
-                     tmp,
-                     levels=levels_t,
-                     colors='k',
-                     linestyles='-',
-                     linewidths=1.2)
-    # ラベルを付ける
-    cr2.clabel(cr2.levels[::cstp], fontsize=12, fmt="%d")
+        cr2.clabel(cr2.levels[::cstp], fontsize=12, fmt="%d")
     #
     cutils = ColUtils('drywet')  # 色テーブルの選択
     cmap = cutils.get_ctable(under='w')  # 色テーブルの取得

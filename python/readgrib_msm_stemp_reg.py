@@ -32,10 +32,10 @@ def plotmap(fcst_time, sta, lons, lats, tmp, rain, title, output_filename):
     lat_max = region.lat_max
     if sta == "Japan":
         opt_c1 = False  # 1Kの等温線を描かない
-        cstp = 2  # 等値線ラベルを何個飛ばしに付けるか
+        cstp = 1  # 等値線ラベルを何個飛ばしに付けるか
     else:
         opt_c1 = True  # 1hPaの等圧線を描く
-        cstp = 1  # 等値線ラベルを何個飛ばしに付けるか
+        cstp = 2  # 等値線ラベルを何個飛ばしに付けるか
 
     # マップを作成
     fig = plt.figure(figsize=(10, 10))
@@ -63,30 +63,31 @@ def plotmap(fcst_time, sta, lons, lats, tmp, rain, title, output_filename):
     cmap = plt.get_cmap('seismic')  # 色テーブルの選択
     if opt_c1:
         # 等温線をひく間隔(1Kごと)をlevelsにリストとして入れる
-        levels1 = range(math.floor(tmp.min() - math.fmod(tmp.min(), 1)),
+        levels1 = range(math.floor(tmp.min() - math.fmod(tmp.min(), 2)),
                         math.ceil(tmp.max()) + 1, 1)
         # 等温線をひく
         cr1 = ax.contour(lons,
                          lats,
                          tmp,
                          levels=levels1,
-                         linestyles=':',
+                         linestyles=['-', ':'],
                          cmap=cmap,
                          linewidths=0.8)
         # ラベルを付ける
-        cr1.clabel(cr1.levels[::cstp * 2], fontsize=12, fmt="%d")
-    # 等温線をひく間隔(2Kごと)をlevelsにリストとして入れる
-    levels2 = range(math.floor(tmp.min() - math.fmod(tmp.min(), 2)),
-                    math.ceil(tmp.max()) + 1, 2)
-    # 等温線をひく
-    cr2 = ax.contour(lons,
-                     lats,
-                     tmp,
-                     levels=levels2,
-                     cmap=cmap,
-                     linewidths=0.8)
-    # ラベルを付ける
-    cr2.clabel(cr2.levels[::cstp], fontsize=12, fmt="%d")
+        cr1.clabel(cr1.levels[::cstp], fontsize=12, fmt="%d")
+    else:
+        # 等温線をひく間隔(2Kごと)をlevelsにリストとして入れる
+        levels2 = range(math.floor(tmp.min() - math.fmod(tmp.min(), 2)),
+                        math.ceil(tmp.max()) + 1, 2)
+        # 等温線をひく
+        cr2 = ax.contour(lons,
+                         lats,
+                         tmp,
+                         levels=levels2,
+                         cmap=cmap,
+                         linewidths=0.8)
+        # ラベルを付ける
+        cr2.clabel(cr2.levels[::cstp], fontsize=12, fmt="%d")
     #
     #
     cutils = ColUtils('s3pcpn_l')  # 色テーブルの選択

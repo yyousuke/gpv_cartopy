@@ -38,7 +38,7 @@ def plotmap(fcst_time, sta, lons, lats, uwnd, vwnd, tmp, rh, title,
     else:
         opt_c1 = True  # 1度の等温線を描く
         opt_barbs = True  # 矢羽を描く
-        bstp = 1  # 矢羽を何個飛ばしに描くか
+        bstp = 2  # 矢羽を何個飛ばしに描くか
         cstp = 3  # 等値線ラベルを何個飛ばしに付けるか
 
     # マップを作成

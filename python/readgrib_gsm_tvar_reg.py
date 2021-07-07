@@ -254,7 +254,6 @@ if __name__ == '__main__':
     nt = len(index_add)
 
     index = np.vstack(index_add).reshape(nt)
-    rain = np.vstack(rain_add).reshape(nt)
     mslp = np.vstack(mslp_add).reshape(nt)
     rain = np.vstack(rain_add).reshape(nt)
     temp = np.vstack(temp_add).reshape(nt)

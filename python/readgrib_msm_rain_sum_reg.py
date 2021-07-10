@@ -155,9 +155,9 @@ if __name__ == '__main__':
     rain = rain_add.sum(axis=0)
     # タイトルの設定
     title = tlab + " MSM forecast, +" + "0-" + str(
-        fcst_time) + "h rain & +" + str(fcst_time) + "h SLP"
+        fcst_end) + "h rain & +" + str(fcst_end) + "h SLP"
     # 出力ファイル名の設定
     output_filename = "map_msm_rain_sum" + "0-" + str(
-        fcst_time) + "_" + sta + ".png"
+        fcst_end) + "_" + sta + ".png"
     # 作図
     plotmap(sta, lons, lats, mslp, rain, title, output_filename)

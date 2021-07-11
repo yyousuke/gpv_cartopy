@@ -19,8 +19,7 @@ import utils.common
 ### Start Map Prog ###
 
 
-def plotmap(fcst_time, sta, lons, lats, z50, the85, the50, dthdz, title,
-            output_filename):
+def plotmap(sta, lons, lats, z50, the85, the50, dthdz, title, output_filename):
     #
     # MapRegion Classの初期化
     region = MapRegion(sta)
@@ -186,7 +185,7 @@ if __name__ == '__main__':
         # 出力ファイル名の設定
         hh = "{d:02d}".format(d=fcst_time)
         output_filename = "map_msm_ept_" + sta + "_" + str(hh) + ".png"
-        plotmap(fcst_time, sta, lons, lats, z50, the85, the50, dthdz, title,
+        plotmap(sta, lons, lats, z50, the85, the50, dthdz, title,
                 output_filename)
         output_filenames.append(output_filename)
     # pngからgifアニメーションに変換

@@ -18,8 +18,7 @@ import utils.common
 ### Start Map Prog ###
 
 
-def plotmap(fcst_time, sta, lons, lats, uwnd, vwnd, tmp, rh, title,
-            output_filename):
+def plotmap(sta, lons, lats, uwnd, vwnd, tmp, rh, title, output_filename):
     #
     # MapRegion Classの初期化
     region = MapRegion(sta)
@@ -68,12 +67,12 @@ def plotmap(fcst_time, sta, lons, lats, uwnd, vwnd, tmp, rh, title,
     # 1度の等温線を描く
     if opt_c1:
         # 等温線を描く値のリスト（1Kごと）
-        levels1 = np.arange(-60, 61, 1)
+        levels_t = np.arange(-60, 61, 1)
         # 等温線を描く
         cr1 = ax.contour(lons,
                          lats,
                          tmp,
-                         levels=levels1,
+                         levels=levels_t,
                          colors='k',
                          linestyles=['-', ':', ':'],
                          linewidths=[1.8, 1.2, 1.2])
@@ -93,9 +92,9 @@ def plotmap(fcst_time, sta, lons, lats, uwnd, vwnd, tmp, rh, title,
         # ラベルを付ける
         cr2.clabel(cr2.levels[::cstp], fontsize=12, fmt="%d")
     #
+    # 色テーブルの設定
     cutils = ColUtils('drywet')  # 色テーブルの選択
     cmap = cutils.get_ctable(under='w')  # 色テーブルの取得
-    #
     # 相対湿度の陰影を付ける値をlevelsrにリストとして入れる
     levelsr = [60, 75, 80, 90, 100]
     # 陰影を描く
@@ -121,6 +120,7 @@ def plotmap(fcst_time, sta, lons, lats, uwnd, vwnd, tmp, rh, title,
     # 図を保存
     plt.savefig(output_filename, dpi=300, bbox_inches='tight')
     plt.close()
+
 
 ### End Map Prog ###
 
@@ -173,8 +173,7 @@ if __name__ == '__main__':
         output_filename = "map_msm_temp_" + str(
             level) + "hPa_" + sta + "_" + str(hh) + ".png"
         # 作図
-        plotmap(fcst_time, sta, lons, lats, uwnd, vwnd, tmp, rh, title,
-                output_filename)
+        plotmap(sta, lons, lats, uwnd, vwnd, tmp, rh, title, output_filename)
         output_filenames.append(output_filename)
     # pngからgifアニメーションに変換
     convert_png2gif(input_filenames=output_filenames,

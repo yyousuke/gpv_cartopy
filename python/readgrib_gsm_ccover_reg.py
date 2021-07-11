@@ -9,7 +9,6 @@ import matplotlib.ticker as mticker
 import cartopy.crs as ccrs
 from jmaloc import MapRegion
 from readgrib import ReadGSM
-from utils import ColUtils
 from utils import val2col
 from utils import convert_png2gif
 from utils import parse_command
@@ -19,8 +18,8 @@ import utils.common
 ### Start Map Prog ###
 
 
-def plotmap(fcst_time, sta, lons_1d, lats_1d, lons, lats, mslp, cfrl, cfrm,
-            cfrh, title, output_filename):
+def plotmap(sta, lons_1d, lats_1d, lons, lats, mslp, cfrl, cfrm, cfrh, title,
+            output_filename):
     #
     # MapRegion Classの初期化
     region = MapRegion(sta)
@@ -184,8 +183,8 @@ if __name__ == '__main__':
         # 出力ファイル名の設定
         hh = "{d:02d}".format(d=fcst_time)
         output_filename = "map_gsm_ccover_" + sta + "_" + str(hh) + ".png"
-        plotmap(fcst_time, sta, lons_1d, lats_1d, lons, lats, mslp, cfrl, cfrm,
-                cfrh, title, output_filename)
+        plotmap(sta, lons_1d, lats_1d, lons, lats, mslp, cfrl, cfrm, cfrh,
+                title, output_filename)
         output_filenames.append(output_filename)
     # pngからgifアニメーションに変換
     convert_png2gif(input_filenames=output_filenames,

@@ -19,7 +19,7 @@ import utils.common
 ### Start Map Prog ###
 
 
-def plotmap(fcst_time, sta, lons, lats, tmp, rain, title, output_filename):
+def plotmap(sta, lons, lats, tmp, rain, title, output_filename):
     #
     # MapRegion Classの初期化
     region = MapRegion(sta)
@@ -89,7 +89,7 @@ def plotmap(fcst_time, sta, lons, lats, tmp, rain, title, output_filename):
         # ラベルを付ける
         cr2.clabel(cr2.levels[::cstp], fontsize=12, fmt="%d")
     #
-    #
+    # 色テーブルの設定
     cutils = ColUtils('s3pcpn_l')  # 色テーブルの選択
     cmap = cutils.get_ctable(under='gray', over='brown')  # 色テーブルの取得
     # 降水量の陰影を付ける値をlevelsrにリストとして入れる
@@ -160,7 +160,7 @@ if __name__ == '__main__':
         hh = "{d:02d}".format(d=fcst_time)
         output_filename = "map_gsm_stemp_" + sta + "_" + str(hh) + ".png"
         # 作図
-        plotmap(fcst_time, sta, lons, lats, tmp, rain, title, output_filename)
+        plotmap(sta, lons, lats, tmp, rain, title, output_filename)
         output_filenames.append(output_filename)
     # pngからgifアニメーションに変換
     convert_png2gif(input_filenames=output_filenames,

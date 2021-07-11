@@ -21,7 +21,7 @@ opt_stmp = False  # 等温線を引く（-2、2℃）
 ### Start Map Prog ###
 
 
-def plotmap(fcst_time, sta, lons, lats, mslp, rain, tmp, uwnd, vwnd, title,
+def plotmap(sta, lons, lats, mslp, rain, tmp, uwnd, vwnd, title,
             output_filename):
     #
     # MapRegion Classの初期化
@@ -119,6 +119,7 @@ def plotmap(fcst_time, sta, lons, lats, mslp, rain, tmp, uwnd, vwnd, title,
         cr4.clabel(cr4.levels[::1], fontsize=12, fmt="%d")
 
     #
+    # 色テーブルの設定
     cutils = ColUtils('s3pcpn_l')  # 色テーブルの選択
     cmap = cutils.get_ctable(under='gray', over='brown')  # 色テーブルの取得
     # 降水量の陰影を付ける値をlevelsrにリストとして入れる
@@ -206,7 +207,7 @@ if __name__ == '__main__':
         hh = "{d:02d}".format(d=fcst_time)
         output_filename = "map_gsm_mslp_" + sta + "_" + str(hh) + ".png"
         # 作図
-        plotmap(fcst_time, sta, lons, lats, mslp, rain, tmp, uwnd, vwnd, title,
+        plotmap(sta, lons, lats, mslp, rain, tmp, uwnd, vwnd, title,
                 output_filename)
         output_filenames.append(output_filename)
     # pngからgifアニメーションに変換

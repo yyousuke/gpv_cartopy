@@ -76,7 +76,16 @@ def plotmap(index, mslp, prep, temp, uwnd, vwnd, relh, cfrl, cfrm, cfrh, cfrt,
     if plt_barbs:
         if barbs_kt:
             # kt
-            ax3.barbs(index, y, uwnd, vwnd, color='k', length=5, sizes=dict(emptybarb=0.001), barb_increments=dict(half=2.57222, full=5.14444, flag=25.7222))
+            ax3.barbs(index,
+                      y,
+                      uwnd,
+                      vwnd,
+                      color='k',
+                      length=5,
+                      sizes=dict(emptybarb=0.001),
+                      barb_increments=dict(half=2.57222,
+                                           full=5.14444,
+                                           flag=25.7222))
         else:
             # m/s
             ax3.barbs(index,
@@ -141,7 +150,8 @@ def plotmap(index, mslp, prep, temp, uwnd, vwnd, relh, cfrl, cfrm, cfrh, cfrt,
     ax3.xaxis.set_major_formatter(mticker.NullFormatter())
     ax3.xaxis.set_minor_formatter(mticker.NullFormatter())
     #
-    ax5.xaxis.set_major_locator(mticker.FixedLocator(ax5.get_xticks().tolist()))
+    ax5.xaxis.set_major_locator(mticker.FixedLocator(
+        ax5.get_xticks().tolist()))
     ax5.set_xticklabels(ax5.get_xticklabels(), rotation=70, size="small")
     ax5.xaxis.set_major_formatter(mdates.DateFormatter('%m/%d %HUTC'))
     ax5.xaxis.set_minor_formatter(mticker.NullFormatter())
@@ -218,7 +228,7 @@ if __name__ == '__main__':
         rain = gsm.ret_var("APCP_surface")  # (mm/h)
         rain_add.append(rain[ilat, ilon])
         # 気温を二次元のndarrayで取り出す (K->℃)
-        temp = gsm.ret_var("TMP_2maboveground", offset=-273.15) # (℃)
+        temp = gsm.ret_var("TMP_2maboveground", offset=-273.15)  # (℃)
         temp_add.append(temp[ilat, ilon])
         # 東西風を二次元のndarrayで取り出す
         uwnd = gsm.ret_var("UGRD_10maboveground")  # (m/s)
@@ -227,7 +237,7 @@ if __name__ == '__main__':
         vwnd = gsm.ret_var("VGRD_10maboveground")  # (m/s)
         vwnd_add.append(vwnd[ilat, ilon])
         # 相対湿度を二次元のndarrayで取り出す
-        relh = gsm.ret_var("RH_2maboveground") # ()
+        relh = gsm.ret_var("RH_2maboveground")  # ()
         relh_add.append(relh[ilat, ilon])
         # 下層雲量を二次元のndarrayで取り出す
         cfrl = gsm.ret_var("LCDC_surface")  # ()

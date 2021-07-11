@@ -90,6 +90,7 @@ def plotmap(sta, lons, lats, mslp, rain, title, output_filename):
         cr2.clabel(cr2.levels[::cstp], fontsize=12, fmt="%d")
     #
     #
+    # 色テーブルの設定
     cutils = ColUtils('wysiwyg')  # 色テーブルの選択
     cmap = cutils.get_ctable(under='gray', over='r')  # 色テーブルの取得
     # 降水量の陰影を付ける値をlevelsrにリストとして入れる

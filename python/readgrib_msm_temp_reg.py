@@ -67,7 +67,7 @@ def plotmap(sta, lons, lats, uwnd, vwnd, tmp, rh, title, output_filename):
     # 1度の等温線を描く
     if opt_c1:
         # 等温線を描く値のリスト（1Kごと）
-        levels_t = np.arange(-60, 61, 1)
+        levels_t = np.arange(-90, 61, 1)
         # 等温線を描く
         cr1 = ax.contour(lons,
                          lats,
@@ -80,7 +80,7 @@ def plotmap(sta, lons, lats, uwnd, vwnd, tmp, rh, title, output_filename):
         cr1.clabel(cr1.levels[::cstp], fontsize=12, fmt="%d")
     else:
         # 等温線を描く値のリスト（3Kごと）
-        levels_t = np.arange(-60, 61, 3)
+        levels_t = np.arange(-90, 61, 3)
         # 等温線を描く
         cr2 = ax.contour(lons,
                          lats,
@@ -155,13 +155,17 @@ if __name__ == '__main__':
         tlab_fcst = tinfo_fcst.strftime("%m/%d %H UTC")
         # NetCDFデータ読み込み
         lons_1d, lats_1d, lons, lats = msm.readnetcdf()
-        # 850 hPa 東西風、南北風データを二次元のndarrayで取り出す
+        # 指定気圧面の東西風、南北風データを二次元のndarrayで取り出す
         uwnd = msm.ret_var("UGRD_" + str(level) + "mb")  # (m/s)
         vwnd = msm.ret_var("VGRD_" + str(level) + "mb")  # (m/s)
-        # 850 hPa 気温データを二次元のndarrayで取り出す (K->℃)
+        # 指定気圧面の気温データを二次元のndarrayで取り出す (K->℃)
         tmp = msm.ret_var("TMP_" + str(level) + "mb", offset=-273.15)  # (℃)
-        # 850 hPa 相対湿度データを二次元のndarrayで取り出す ()
-        rh = msm.ret_var("RH_" + str(level) + "mb")  # ()
+        # 指定気圧面の相対湿度データを二次元のndarrayで取り出す ()
+        if int(level) >= 300:
+            rh = msm.ret_var("RH_" + str(level) + "mb")  # ()
+        else:
+            rh = np.zeros(tmp.shape)
+        # 指定気圧面の相対湿度データを二次元のndarrayで取り出す ()
         # ファイルを閉じる
         msm.close_netcdf()
         #

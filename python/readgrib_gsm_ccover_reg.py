@@ -111,20 +111,20 @@ def plotmap(sta, lons_1d, lats_1d, lons, lats, mslp, cfrl, cfrm, cfrh, title,
     cbarm = val2col(cmap='Greens', tmin=0., tmax=100.1, tstep=20.)
     cbarl = val2col(cmap='Reds', tmin=0., tmax=100.1, tstep=20.)
     # カラーバーを付ける
-    cbarh.colorbar(fig, anchor=(0.35, 0.26), size=(0.3, 0.02), label=False)
-    cbarm.colorbar(fig, anchor=(0.35, 0.225), size=(0.3, 0.02), label=False)
-    cbarl.colorbar(fig, anchor=(0.35, 0.19), size=(0.3, 0.02), label=True)
+    cbarh.colorbar(fig, anchor=(0.35, 0.255), size=(0.3, 0.02), label=False)
+    cbarm.colorbar(fig, anchor=(0.35, 0.22), size=(0.3, 0.02), label=False)
+    cbarl.colorbar(fig, anchor=(0.35, 0.185), size=(0.3, 0.02), label=True)
     # ラベルを付ける
     cbarh.clabel(fig,
-                 anchor=(0.34, 0.26),
+                 anchor=(0.34, 0.255),
                  size=(0.1, 0.02),
                  text="High cloud cover")
     cbarm.clabel(fig,
-                 anchor=(0.34, 0.225),
+                 anchor=(0.34, 0.22),
                  size=(0.1, 0.02),
                  text="Middle cloud cover")
     cbarl.clabel(fig,
-                 anchor=(0.34, 0.19),
+                 anchor=(0.34, 0.185),
                  size=(0.1, 0.02),
                  text="Low cloud cover")
     #

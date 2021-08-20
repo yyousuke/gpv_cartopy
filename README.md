@@ -1,6 +1,6 @@
 # gpv_cartopy
 
-気象庁数値予報GPVデータを取得し、cartopyで作図する。データは京都大学生存圏研究所（RISH）のサーバから取得する。データ利用時の注意事項等については、RISHのページ（http://database.rish.kyoto-u.ac.jp/arch/jmadata/）参照のこと。
+気象庁数値予報GPVデータを取得し、cartopyで作図する。データは京都大学生存圏研究所（RISH）のサーバから取得する。データ利用時の注意事項等については、RISHのページ（ http://database3.rish.kyoto-u.ac.jp/arch/jmadata/ ）参照のこと。
 
 ./main.py：手動で./python/以下の全プログラムを実行する場合
 

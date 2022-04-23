@@ -20,6 +20,30 @@ import utils.common
 
 
 def plotmap(sta, lons, lats, z50, the85, the50, dthdz, title, output_filename):
+    """作図を行う
+    
+    Parameters:
+    ----------
+    sta: str
+        地点名 
+    lons: ndarray
+        経度データ（2次元、度）
+    lats: ndarray
+        緯度データ（2次元、度）
+    z50: ndarray
+        500hPaジオポテンシャル高度（2次元、m）
+    the85: ndarray
+        850hPa相当温位（2次元、K）
+    the50: ndarray
+        500hPa相当温位（2次元、K）
+    dthdz: ndarray
+       安定度（the50 - the85）（2次元、K）
+    title: str
+        タイトル
+    output_filename: str
+        出力ファイル名 
+    ----------
+    """
     #
     # MapRegion Classの初期化
     region = MapRegion(sta)

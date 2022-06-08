@@ -33,7 +33,7 @@ def get_gridloc(loc_list, loc):
     Returns:
     ----------
     iloc: int
-        近傍のデータ点番号
+        近傍データ点のグリッド番号
     ----------
     """
     r = 360.
@@ -47,34 +47,31 @@ def get_gridloc(loc_list, loc):
 
 
 #
-# rh = q/qs*100 [%]
-# thetae = (tmp + EL/CP * q) * (p00 / p)**(Rd/Cp)
-#
-# ECMWF
-# qs = Rd/Rv*es0/p*exp[
-#       (Lq+emelt/2.0*(1.0-sign(1.0,T-Tqice)))
-#       /Rv*(1.0/Tmelt-1.0/T)]
-#
-# input: pres, tem, rh: 気圧、気温、相対湿度
-# output: the, thes: 相当温位、飽和相当温位
 def mktheta(pres, tem, rh):
-    """相当温位、飽和相当温位を求める
+    """気圧、気温、相対湿度の入力から相当温位、飽和相当温位を求める
+
+    rh = q/qs*100 [%]
+    thetae = (tmp + EL/CP * q) * (p00 / p)**(Rd/Cp)
+    
+    ECMWF
+    qs = Rd/Rv*es0/p*exp[
+           (Lq+emelt/2.0*(1.0-sign(1.0,T-Tqice))) / Rv*(1.0/Tmelt-1.0/T)]
 
     Parameters:
     ----------
-    pres: numpy.ndarray
-        気圧（Pa）
-    tem: numpy.ndarray
-        気温（K）
-    rh: numpy.ndarray
-        相対湿度（%）
+    pres: float or numpy.ndarray
+        気圧 [Pa]
+    tem: float or numpy.ndarray
+        気温 [K]
+    rh: float or numpy.ndarray
+        相対湿度 [%]
     ----------
     Returns:
     ----------
     the: float
-        相当温位（K）
+        相当温位 [K]
     thes: float
-        飽和相当温位（K）
+        飽和相当温位 [K]
     ----------
     """
     Rd = 287.04  # gas constant of dry air [J/K/kg]

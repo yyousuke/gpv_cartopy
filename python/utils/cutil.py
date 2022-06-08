@@ -281,15 +281,17 @@ _no_green_data = {
 
 
 class ColUtils():
-    """カラーユーティリティ
+    """カラーユーティリティ"""
 
-    Parameters:
-    ----------
-    cmap_name: str
-        色テーブルの名前
-    ----------
-    """
     def __init__(self, cmap_name=None):
+        """色テーブルを設定
+    
+        Parameters:
+        ----------
+        cmap_name: str
+            色テーブルの名前
+        ----------
+        """
         self.cmap_name = cmap_name
         if self.cmap_name == "s3pcpn_l":
             self._segment_data = _s3pcpn_l_data

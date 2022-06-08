@@ -7,6 +7,13 @@ import subprocess
 import urllib.request
 import netCDF4
 import numpy as np
+import ssl
+
+ssl._create_default_https_context = ssl._create_unverified_context
+
+# for debug
+#verbose = True
+verbose = False
 
 # 入力する気象庁GPVデータのファイルを置いたディレクトリ
 sys_file_dir = os.environ.get('DATADIR_GPV', '/data')
@@ -69,19 +76,14 @@ def _ret_grib(tsel, file_name_g2, file_name_nc, force=False):
             ["wgrib2", file_dir_name, "-netcdf", file_name_nc],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE)
-        print(res.stdout.decode("utf-8"))
+        if verbose:
+            print(res.stdout.decode("utf-8"))
         file_dir_name = file_name_nc
         if not os.path.isfile(file_name_nc):
             raise FileNotFoundError("Convert failed, " + file_name_nc)
     return file_dir_name
 
 
-#  dir="${yyyy}/${mm}/${dd}"
-#  file="Z__C_RJTD_${yyyy}${mm}${dd}${hh}0000_MSM_GPV_Rjp_${flag}_grib2.bin"
-#  nc="Z__C_RJTD_${yyyy}${mm}${dd}${hh}0000_MSM_GPV_Rjp_${flag}_grib2.nc"
-#  ${WGET} ${URL}/${dir}/${file} >> ${log} 2>&1 || exit 1
-#  ${WGRIB2} ${file} -netcdf ${nc} >> ${log} 2>&1 || exit 1
-#
 def _netcdf_msm_surf(msm_dir, fcst_time, tsel):
     """netCDFファイルを読み込む(MSM、surf)
 
@@ -137,7 +139,28 @@ def _netcdf_msm_surf(msm_dir, fcst_time, tsel):
 
 #
 def _netcdf_msm_plev(msm_dir, fcst_time, tsel):
-    """netCDFファイルを読み込む(MSM、pres)"""
+    """netCDFファイルを読み込む(MSM、pres)
+
+    Parameters:
+    ----------
+    msm_dir: str
+        MSMデータを置いたディレクトリ、またはretrieve、force_retrieve
+        retrieve：データ取得を行う。既に存在している場合は取得しない。
+        force_retrieve：データ取得を行う。既に存在している場合にも再取得する。
+        ディレクトリ名：新たにデータ取得は行わず、指定ディレクトリにあるNetCDFファイル名を返す
+    fcst_time: int
+        予報時刻
+    tsel: str
+        ファイル名に含まれる時刻部分
+    ----------
+    Returns 
+    ----------    
+    rec_num: int
+        予報時刻に相当するデータ番号
+    file_dir_name: str
+        変換したNetCDFファイル名
+    ----------
+    """
     if fcst_time <= 15:
         fcst_flag = "00-15"
         rec_num = fcst_time // 3
@@ -170,6 +193,28 @@ def _netcdf_msm_plev(msm_dir, fcst_time, tsel):
 
 #
 def _netcdf_gsm_surf(gsm_dir, fcst_time, tsel):
+    """netCDFファイルを読み込む(GSM、surf)
+
+    Parameters:
+    ----------
+    msm_dir: str
+        GSMデータを置いたディレクトリ、またはretrieve、force_retrieve
+        retrieve：データ取得を行う。既に存在している場合は取得しない。
+        force_retrieve：データ取得を行う。既に存在している場合にも再取得する。
+        ディレクトリ名：新たにデータ取得は行わず、指定ディレクトリにあるNetCDFファイル名を返す
+    fcst_time: int
+        予報時刻
+    tsel: str
+        ファイル名に含まれる時刻部分
+    ----------
+    Returns 
+    ----------    
+    rec_num: int
+        予報時刻に相当するデータ番号
+    file_dir_name: str
+        変換したNetCDFファイル名
+    ----------
+    """
     """netCDFファイルを読み込む(GSM、surf)"""
     if fcst_time <= 84:  # 1h毎
         fcst_flag = "0000-0312"
@@ -203,7 +248,28 @@ def _netcdf_gsm_surf(gsm_dir, fcst_time, tsel):
 
 #
 def _netcdf_gsm_plev(gsm_dir, fcst_time, tsel):
-    """netCDFファイルを読み込む(GSM、pres)"""
+    """netCDFファイルを読み込む(GSM、pres)
+
+    Parameters:
+    ----------
+    msm_dir: str
+        GSMデータを置いたディレクトリ、またはretrieve、force_retrieve
+        retrieve：データ取得を行う。既に存在している場合は取得しない。
+        force_retrieve：データ取得を行う。既に存在している場合にも再取得する。
+        ディレクトリ名：新たにデータ取得は行わず、指定ディレクトリにあるNetCDFファイル名を返す
+    fcst_time: int
+        予報時刻
+    tsel: str
+        ファイル名に含まれる時刻部分
+    ----------
+    Returns 
+    ----------    
+    rec_num: int
+        予報時刻に相当するデータ番号
+    file_dir_name: str
+        変換したNetCDFファイル名
+    ----------
+    """
     if fcst_time <= 84:
         fcst_flag = "0000-0312"
         rec_num = fcst_time // 3
@@ -240,19 +306,21 @@ def _netcdf_gsm_plev(gsm_dir, fcst_time, tsel):
 
 
 class ReadMSM():
-    """MSMデータを取得し、ndarrayに変換する
+    """MSMデータを取得し、ndarrayに変換する"""
 
-    Parameters:
-    ----------
-    tsel: str
-        取得する時刻（形式：20210819120000）
-    msm_dir_path: str
-        MSMデータのあるディレクトリのパス
-    msm_lev: str
-        <surf/plev>：surfなら表面データ、plevなら気圧面データ
-    ----------
-    """
     def __init__(self, tsel=None, msm_dir=None, msm_lev=None):
+        """取得する初期時刻の設定
+
+        Parameters:
+        ----------
+        tsel: str
+            取得する時刻（形式：20210819120000）
+        msm_dir_path: str
+            MSMデータのあるディレクトリのパス
+        msm_lev: str
+            <surf/plev>：surfなら表面データ、plevなら気圧面データ
+        ----------
+        """
         self.tsel = tsel
         self.msm_dir = msm_dir
         self.msm_lev = msm_lev
@@ -306,15 +374,18 @@ class ReadMSM():
         idim = len(nc.dimensions['longitude'])
         jdim = len(nc.dimensions['latitude'])
         num_rec = len(nc.dimensions['time'])
-        print("num_lon =", idim, ", num_lat =", jdim, ", num_time =", num_rec)
+        if verbose:
+            print("num_lon =", idim, ", num_lat =", jdim, ", num_time =",
+                  num_rec)
         # 変数の読み込み(一次元)
         lons_1d = nc.variables["longitude"][:]
         lats_1d = nc.variables["latitude"][:]
         time = nc.variables["time"][:]
         # lons, lats: 二次元配列に変換
         lons, lats = np.meshgrid(lons_1d, lats_1d)
-        print("lon:", lons.shape)
-        print("lat:", lats.shape)
+        if verbose:
+            print("lon:", lons.shape)
+            print("lat:", lats.shape)
         return lons_1d, lats_1d, lons, lats
 
     #
@@ -353,7 +424,40 @@ class ReadMSM():
             # データを取り出し、factを掛けoffsetを足す
             d = nc.variables[var_name][rec_num] * fact + offset
         #
-        print(var_name, d.shape)
+        if verbose:
+            print("read: ", var_name, d.shape)
+        return d
+
+    #
+    def ret_var_3d(self, var_name, plevs, fact=1.0, offset=0.0):
+        """netCDFファイルに含まれているデータを三次元のndarrayで返す
+        
+        Parameters:
+        ----------
+        varname: str
+            読み出す変数名（気圧面の名前は付けない）
+        plevs: list(int, int, ...) or ndarray(int, int, ...)
+            読み出す気圧面レベル（hPa）
+        fact: float
+            データに掛けるスケールファクター
+        offset: float
+            データに足すオフセット値
+        ----------
+        Returns 
+        ----------
+        d: ndarray
+            取り出した3次元データ
+        ----------
+        """
+        d = []
+        # 気圧面毎に取り出す
+        for p in plevs:
+            vn = var_name + "_" + str(p) + "mb"
+            d.append(self.ret_var(vn, fact=fact, offset=offset))
+        # 3次元データの作成
+        d = np.array(d)
+        if verbose:
+            print(var_name, d.shape)
         return d
 
     #
@@ -367,19 +471,21 @@ class ReadMSM():
 
 
 class ReadGSM():
-    """GSMデータを取得し、ndarrayに変換する
+    """GSMデータを取得し、ndarrayに変換する"""
 
-    Parameters:
-    ----------
-    tsel: str
-        取得する時刻（形式：20210819120000）
-    gsm_dir_path: str
-        GSMデータのあるディレクトリのパス
-    gsm_lev: str
-        <surf/plev>：surfなら表面データ、plevなら気圧面データ
-    ----------
-    """
     def __init__(self, tsel=None, gsm_dir=None, gsm_lev=None):
+        """取得する初期時刻の設定
+
+        Parameters:
+        ----------
+        tsel: str
+            取得する時刻（形式：20210819120000）
+        gsm_dir_path: str
+            GSMデータのあるディレクトリのパス
+        gsm_lev: str
+            <surf/plev>：surfなら表面データ、plevなら気圧面データ
+        ----------
+        """
         self.tsel = tsel
         self.gsm_dir = gsm_dir
         self.gsm_lev = gsm_lev
@@ -494,6 +600,37 @@ class ReadGSM():
             # データを取り出し、factを掛けoffsetを足す
             d = nc.variables[var_name][rec_num] * fact + offset
         #
+        print(var_name, d.shape)
+        return d
+
+    #
+    def ret_var_3d(self, var_name, plevs, fact=1.0, offset=0.0):
+        """netCDFファイルに含まれているデータを三次元のndarrayで返す
+        
+        Parameters:
+        ----------
+        varname: str
+            読み出す変数名（気圧面の名前は付けない）
+        plevs: list(int, int, ...) or ndarray(int, int, ...)
+            読み出す気圧面レベル（hPa）
+        fact: float
+            データに掛けるスケールファクター
+        offset: float
+            データに足すオフセット値
+        ----------
+        Returns 
+        ----------
+        d: ndarray
+            取り出した3次元データ
+        ----------
+        """
+        d = []
+        # 気圧面毎に取り出す
+        for p in plevs:
+            vn = var_name + "_" + str(p) + "mb"
+            d.append(self.ret_var(vn, fact=fact, offset=offset))
+        # 3次元データの作成
+        d = np.array(d)
         print(var_name, d.shape)
         return d
 

@@ -84,7 +84,7 @@ def plotmap(sta, lons, lats, z50, the85, the50, dthdz, title, output_filename):
     gl.right_labels = False  # 下側の目盛り線ラベルを描かない
 
     # 海岸線を描く
-    ax.coastlines(color='k', linewidth=1.2)
+    ax.coastlines(color='k', linewidth=1.2, zorder=10)
     #
     # 850 hPa等相当温位線
     # 等相当温位線を描く値のリスト

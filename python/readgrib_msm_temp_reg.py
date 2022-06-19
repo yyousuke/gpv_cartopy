@@ -85,7 +85,7 @@ def plotmap(sta, lons, lats, uwnd, vwnd, tmp, rh, title, output_filename):
     gl.right_labels = False  # 下側の目盛り線ラベルを描かない
 
     # 海岸線を描く
-    ax.coastlines(color='k', linewidth=1.2)
+    ax.coastlines(color='k', linewidth=1.2, zorder=10)
     #
     # デフォルト：850 hPa気温の等温線を描く
     # 1度の等温線を描く

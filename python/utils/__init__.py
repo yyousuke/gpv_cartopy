@@ -149,8 +149,23 @@ def post(output_filenames):
             os.remove(f)
 
 
-def _construct_parser(opt_lev=False):
-    """オプションの読み込み"""
+def _construct_parser(opt_sta, opt_lev, opt_dset):
+    """ オプションの読み込み
+
+    Parameters:
+    ----------
+    opt_sta: bool
+        地点データを読み込むかどうか
+    opt_lev: bool
+        気圧面を指定するかどうか
+    opt_dset: bool
+        GSMかMSMを指定するかどうか
+    Returns
+    ----------
+    parser: argparse.ArgumentParse
+        読み込んだオプションのparser
+    ----------
+    """
     parser = argparse.ArgumentParser(
         description='Matplotlib cartopy, weather map')
 
@@ -163,15 +178,22 @@ def _construct_parser(opt_lev=False):
         type=int,
         help=('forecast time; hour (starting from forecast date)'),
         metavar='<fcsttime>')
-    parser.add_argument('--sta',
-                        type=str,
-                        help=('Station name; e.g. Japan, Tokyo,,,'),
-                        metavar='<sta>')
+    if opt_sta:
+        parser.add_argument('--sta',
+                            type=str,
+                            help=('Station name; e.g. Japan, Tokyo,,,'),
+                            metavar='<sta>')
     if opt_lev:
         parser.add_argument('--level',
                             type=str,
                             help=('level (hPa); e.g. 925, 850, 700, 500,,,'),
                             metavar='<level>')
+
+    if opt_dset:
+        parser.add_argument('--dset',
+                            type=str,
+                            help=('dataset name: GSM or MSM'),
+                            metavar='<dset>')
     parser.add_argument(
         '--input_dir',
         type=str,
@@ -184,13 +206,17 @@ def _construct_parser(opt_lev=False):
     return parser
 
 
-def parse_command(args, opt_lev=False):
+def parse_command(args, opt_sta=True, opt_lev=False, opt_dset=False):
     """オプションの読み込み
 
     Parameters:
     ----------
+    opt_sta: bool
+        地点データを読み込むかどうか（デフォルト：True）
     opt_lev: bool
-        気圧面レベルを取得するかどうか
+        気圧面を指定するかどうか（デフォルト：False）
+    opt_dset: bool
+        GSMかMSMを指定するかどうか（デフォルト：False）
     ----------
     Returns:
     ----------
@@ -198,12 +224,10 @@ def parse_command(args, opt_lev=False):
         読み込んだオプション
     ----------
     """
-    parser = _construct_parser(opt_lev)
+    parser = _construct_parser(opt_sta, opt_lev, opt_dset)
     parsed_args = parser.parse_args(args[1:])
     if parsed_args.fcst_date is None:
         raise ValueError("fcst_date is needed")
-    if parsed_args.sta is None:
-        raise ValueError("sta is needed")
     if parsed_args.input_dir is None:
         parsed_args.input_dir = input_dir_default
     if parsed_args.fcst_time is None:
@@ -211,4 +235,7 @@ def parse_command(args, opt_lev=False):
     if opt_lev:
         if parsed_args.level is None:
             parsed_args.level = 850
+    if opt_dset:
+        if parsed_args.dset is None:
+            parsed_args.dset = "GSM"
     return parsed_args

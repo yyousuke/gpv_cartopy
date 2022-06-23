@@ -1,5 +1,4 @@
 #!/opt/local/bin/python3
-import sys
 import subprocess
 from datetime import datetime, timedelta
 
@@ -11,12 +10,16 @@ progs_gsm = [
     "python/readgrib_gsm_ccover_reg.py",
     "python/readgrib_gsm_stemp_reg.py",
     "python/readgrib_gsm_rain_sum_reg.py",
+    "python/readgrib_gsm_temp_reg.py"
 ]
 # MSM
 progs_msm = [
-    "python/readgrib_msm_mslp_reg.py", "python/readgrib_msm_ccover_reg.py",
-    "python/readgrib_msm_stemp_reg.py", "python/readgrib_msm_rain_sum_reg.py",
-    "python/readgrib_msm_temp_reg.py", "python/readgrib_msm_ept_reg.py"
+    "python/readgrib_msm_mslp_reg.py",
+    "python/readgrib_msm_ccover_reg.py",
+    "python/readgrib_msm_stemp_reg.py",
+    "python/readgrib_msm_rain_sum_reg.py",
+    "python/readgrib_msm_temp_reg.py",
+    "python/readgrib_msm_ept_reg.py"
 ]
 #
 # 時系列図（アメダス地点名）

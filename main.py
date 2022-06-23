@@ -1,26 +1,28 @@
 #!/opt/local/bin/python3
-import sys
 import subprocess
 
-fcst_date = "20210711000000"  # UTC
+fcst_date = "20220623000000"  # UTC
 opt_gsm = True  # GSMも作図する場合（00, 06, 12, 18UTCのみ）
 
 # 水平分布
 stations = ["Japan", "Tokyo"]
-#stations = ["Okayama"]
-#stations = ["Kagoshima"]
+
 # GSM
 progs_gsm = [
     "python/readgrib_gsm_mslp_reg.py",
     "python/readgrib_gsm_ccover_reg.py",
     "python/readgrib_gsm_stemp_reg.py",
     "python/readgrib_gsm_rain_sum_reg.py",
+    "python/readgrib_gsm_temp_reg.py"
 ]
 # MSM
 progs_msm = [
-    "python/readgrib_msm_mslp_reg.py", "python/readgrib_msm_ccover_reg.py",
-    "python/readgrib_msm_stemp_reg.py", "python/readgrib_msm_rain_sum_reg.py",
-    "python/readgrib_msm_temp_reg.py", "python/readgrib_msm_ept_reg.py"
+    "python/readgrib_msm_mslp_reg.py",
+    "python/readgrib_msm_ccover_reg.py",
+    "python/readgrib_msm_stemp_reg.py",
+    "python/readgrib_msm_rain_sum_reg.py",
+    "python/readgrib_msm_temp_reg.py",
+    "python/readgrib_msm_ept_reg.py"
 ]
 #
 # 時系列図（アメダス地点名）

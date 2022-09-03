@@ -1,7 +1,6 @@
 #!/opt/local/bin/python3
 import pandas as pd
 import numpy as np
-import math
 import sys
 from datetime import timedelta
 import matplotlib.pyplot as plt
@@ -16,16 +15,14 @@ from utils import parse_command
 from utils import post
 import utils.common
 
-### Start Map Prog ###
-
 
 def plotmap(sta, lons, lats, z50, the85, the50, dthdz, title, output_filename):
     """作図を行う
-    
+
     Parameters:
     ----------
     sta: str
-        地点名 
+        地点名
     lons: ndarray
         経度データ（2次元、度）
     lats: ndarray
@@ -41,7 +38,7 @@ def plotmap(sta, lons, lats, z50, the85, the50, dthdz, title, output_filename):
     title: str
         タイトル
     output_filename: str
-        出力ファイル名 
+        出力ファイル名
     ----------
     """
     #
@@ -55,12 +52,8 @@ def plotmap(sta, lons, lats, z50, the85, the50, dthdz, title, output_filename):
     lat_min = region.lat_min
     lat_max = region.lat_max
     if sta == "Japan":
-        opt_barbs = True  # 矢羽を描く
-        bstp = 10  # 矢羽を何個飛ばしに描くか
         cstp = 5  # 等値線ラベルを何個飛ばしに付けるか
     else:
-        opt_barbs = True  # 矢羽を描く
-        bstp = 1  # 矢羽を何個飛ばしに描くか
         cstp = 5  # 等値線ラベルを何個飛ばしに付けるか
 
     # マップを作成
@@ -145,8 +138,6 @@ def plotmap(sta, lons, lats, z50, the85, the50, dthdz, title, output_filename):
     plt.savefig(output_filename, dpi=300, bbox_inches='tight')
     plt.close()
 
-
-### End Map Prog ###
 
 if __name__ == '__main__':
     pr85 = 85000.0  # pressure (Pa) for 850 hPa

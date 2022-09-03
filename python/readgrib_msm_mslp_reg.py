@@ -18,17 +18,15 @@ import utils.common
 
 opt_stmp = False  # 等温線を引く（-2、2℃）
 
-### Start Map Prog ###
-
 
 def plotmap(sta, lons, lats, mslp, rain, tmp, uwnd, vwnd, title,
             output_filename):
     """作図を行う
-    
+
     Parameters:
     ----------
     sta: str
-        地点名 
+        地点名
     lons: ndarray
         経度データ（2次元、度）
     lats: ndarray
@@ -42,7 +40,7 @@ def plotmap(sta, lons, lats, mslp, rain, tmp, uwnd, vwnd, title,
     title: str
         タイトル
     output_filename: str
-        出力ファイル名 
+        出力ファイル名
     ----------
     """
     #
@@ -175,8 +173,6 @@ def plotmap(sta, lons, lats, mslp, rain, tmp, uwnd, vwnd, title,
     plt.savefig(output_filename, dpi=300, bbox_inches='tight')
     plt.close()
 
-
-### End Map Prog ###
 
 if __name__ == '__main__':
     # オプションの読み込み

@@ -3,30 +3,23 @@ import pandas as pd
 import numpy as np
 import math
 import sys
-from datetime import timedelta
-import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
 import cartopy.crs as ccrs
 from jmaloc import MapRegion
 from readgrib import ReadGSM
 from utils import ColUtils
-from utils import convert_png2gif
-from utils import convert_png2mp4
 from utils import parse_command
-from utils import post
 import utils.common
-
-### Start Map Prog ###
 
 
 def plotmap(sta, lons, lats, mslp, rain, title, output_filename):
     """作図を行う
-    
+
     Parameters:
     ----------
     sta: str
-        地点名 
+        地点名
     lons: ndarray
         経度データ（2次元、度）
     lats: ndarray
@@ -38,7 +31,7 @@ def plotmap(sta, lons, lats, mslp, rain, title, output_filename):
     title: str
         タイトル
     output_filename: str
-        出力ファイル名 
+        出力ファイル名
     ----------
     """
     #
@@ -131,8 +124,6 @@ def plotmap(sta, lons, lats, mslp, rain, title, output_filename):
     plt.savefig(output_filename, dpi=300, bbox_inches='tight')
     plt.close()
 
-
-### End Map Prog ###
 
 if __name__ == '__main__':
     # オプションの読み込み

@@ -15,17 +15,15 @@ from utils import parse_command
 from utils import post
 import utils.common
 
-### Start Map Prog ###
-
 
 def plotmap(sta, lons_1d, lats_1d, lons, lats, mslp, cfrl, cfrm, cfrh, title,
             output_filename):
     """作図を行う
-    
+
     Parameters:
     ----------
     sta: str
-        地点名 
+        地点名
     lons_1d: str
         経度データ（1次元、度）
     lats_1d: ndarray
@@ -45,7 +43,7 @@ def plotmap(sta, lons_1d, lats_1d, lons, lats, mslp, cfrl, cfrm, cfrh, title,
     title: str
         タイトル
     output_filename: str
-        出力ファイル名 
+        出力ファイル名
     ----------
     """
     #
@@ -68,7 +66,7 @@ def plotmap(sta, lons_1d, lats_1d, lons, lats, mslp, cfrl, cfrm, cfrh, title,
     # マップを作成
     fig = plt.figure(figsize=(10, 10))
     # cartopy呼び出し
-    #ax = fig.add_subplot(1, 1, 1, projection=ccrs.PlateCarree())
+    # ax = fig.add_subplot(1, 1, 1, projection=ccrs.PlateCarree())
     ax = fig.add_axes((0.1, 0.3, 0.8, 0.6), projection=ccrs.PlateCarree())
     ax.set_extent([lon_min, lon_max, lat_min, lat_max])  # 領域の限定
 
@@ -125,11 +123,11 @@ def plotmap(sta, lons_1d, lats_1d, lons, lats, mslp, cfrl, cfrm, cfrh, title,
     cmapm = plt.get_cmap('Greens')  # 中層
     cmaph = plt.get_cmap('Blues')  # 上層
     # 陰影を描く（下層雲）
-    csl = ax.contourf(lons, lats, cfrl, levels=levelsc, cmap=cmapl, alpha=0.3)
+    ax.contourf(lons, lats, cfrl, levels=levelsc, cmap=cmapl, alpha=0.3)
     # 陰影を描く（中層雲）
-    csm = ax.contourf(lons, lats, cfrm, levels=levelsc, cmap=cmapm, alpha=0.3)
+    ax.contourf(lons, lats, cfrm, levels=levelsc, cmap=cmapm, alpha=0.3)
     # 陰影を描く（上層雲）
-    csh = ax.contourf(lons, lats, cfrh, levels=levelsc, cmap=cmaph, alpha=0.3)
+    ax.contourf(lons, lats, cfrh, levels=levelsc, cmap=cmaph, alpha=0.3)
     #
     # タイトルを付ける
     plt.title(title, fontsize=20)
@@ -160,8 +158,6 @@ def plotmap(sta, lons_1d, lats_1d, lons, lats, mslp, cfrl, cfrm, cfrh, title,
     plt.savefig(output_filename, dpi=300, bbox_inches='tight')
     plt.close()
 
-
-### End Map Prog ###
 
 if __name__ == '__main__':
     # オプションの読み込み

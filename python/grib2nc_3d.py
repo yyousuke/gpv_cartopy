@@ -113,6 +113,18 @@ def readnc(tsel, dset, file_dir, fcst_str, fcst_end, fcst_step):
 
 
 def writenc(d, info_json_path="output.json", output_nc_path="test.nc"):
+    """ NetCDFファイルとして書き出す
+
+    Parameters:
+    ----------
+    d: dict of keys and ndarray value
+        書き出すデータを変数名をキー、ndarrayを値とした辞書で与える
+    info_json_path: str
+        書き出すデータの情報を記述したJSONファイルのパス
+    output_nc_path: str
+        書き出すNetCDFファイルのパス
+    ----------
+    """
     # JSONデータ読み込み
     with open(info_json_path, 'rt') as fin:
         data = fin.read()

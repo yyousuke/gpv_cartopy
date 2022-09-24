@@ -193,11 +193,11 @@ if __name__ == '__main__':
         # 海面更生気圧を二次元のndarrayで取り出す
         mslp = msm.ret_var("PRMSL_meansealevel", fact=0.01)  # (hPa)
         # 下層雲量を二次元のndarrayで取り出す
-        cfrl = msm.ret_var("LCDC_surface")  # ()
+        cfrl = msm.ret_var("LCDC_surface")  # (%)
         # 中層雲量を二次元のndarrayで取り出す
-        cfrm = msm.ret_var("MCDC_surface")  # ()
+        cfrm = msm.ret_var("MCDC_surface")  # (%)
         # 上層雲量を二次元のndarrayで取り出す
-        cfrh = msm.ret_var("HCDC_surface")  # ()
+        cfrh = msm.ret_var("HCDC_surface")  # (%)
         # ファイルを閉じる
         msm.close_netcdf()
         #

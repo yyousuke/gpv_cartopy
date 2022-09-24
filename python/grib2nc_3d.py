@@ -50,7 +50,7 @@ def readnc(tsel, dset, file_dir, fcst_str, fcst_end, fcst_step):
     else:
         raise ValueError("GSM or MSM")
     #
-    # fcst_timeを変えてplotmapを実行
+    # fcst_timeを変えてデータを取り出す
     tind = []
     tmp = []
     rh = []
@@ -125,7 +125,7 @@ def writenc(d, info_json_path="output.json", output_nc_path="test.nc"):
     # 複数の軸情報をDataFrameにする
     df = pd.DataFrame(json.loads(data)["axis_entry"]).fillna("NaN")
     for k in df.columns:  # DataFrameの列をキーに
-        # 読み込んだCFSRデータから軸のデータを取り出す
+        # 読み込んだGPVデータから軸のデータを取り出す
         dat = np.array(d[k])
         # DataFrameから軸に対応する辞書を取り出し
         # 軸情報をNetCDFファイルに追加
@@ -136,7 +136,7 @@ def writenc(d, info_json_path="output.json", output_nc_path="test.nc"):
     # 変数の情報をDataFrameにする
     df = pd.DataFrame(json.loads(data)["variable_entry"])
     for k in df.columns:  # DataFrameの列をキーに
-        # 読み込んだCFSRデータから軸のデータを取り出す
+        # 読み込んだGPVデータから軸のデータを取り出す
         dat = np.array(d[k])
         # DataFrameから変数に対応する辞書を取り出し
         # 変数情報をNetCDFファイルに追加

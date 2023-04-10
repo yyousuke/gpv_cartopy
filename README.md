@@ -42,6 +42,8 @@
 
 - **readgrib_gsm_stemp_reg.py**：GSMデータから地表気温と降水量を描く
 
+- **readgrib_gsm_temp_reg.py**：GSMデータから指定気圧面の温度と相対湿度、風向・風速を描く
+
 - **readgrib_gsm_tvar_reg.py**：GSMデータからアメダス地点近傍の時系列図を描く
 
 - **readgrib_msm_ccover_reg.py**：MSMデータから下層・中層・上層雲量と海面気圧を描く
@@ -72,7 +74,9 @@
 
 - **--fcst_time** <整数値>（デフォルト36）： 何時間先までの予報データを作図するか、または、何時間積算値を作図するか（降水量の場合）
 
-- **--lev** <整数値>：作図する気圧面をhPaで（readgrib_msm_temp_reg.pyのみ、デフォルト値：850）
+    MSMは78時間後まで、GSMは111時間後まで
+
+- **--lev** <整数値>：作図する気圧面をhPaで（デフォルト値：850）（readgrib_gsm_temp_reg.py、readgrib_msm_temp_reg.pyのみ）
 
     指定可能な気圧面は以下
 

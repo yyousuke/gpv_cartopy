@@ -113,9 +113,15 @@ def _netcdf_msm_surf(msm_dir, fcst_time, tsel):
     elif fcst_time <= 33:
         fcst_flag = "16-33"
         rec_num = fcst_time - 16
-    else:
+    elif fcst_time <= 39:
         fcst_flag = "34-39"
         rec_num = fcst_time - 34
+    elif fcst_time <= 51:
+        fcst_flag = "40-51"
+        rec_num = fcst_time - 40
+    else:
+        fcst_flag = "52-78"
+        rec_num = fcst_time - 52
     # ファイル名
     file_name_g2 = "Z__C_RJTD_" + str(tsel) + "_MSM_GPV_Rjp_Lsurf_FH" + str(
         fcst_flag) + "_grib2.bin"
@@ -167,9 +173,15 @@ def _netcdf_msm_plev(msm_dir, fcst_time, tsel):
     elif fcst_time <= 33:
         fcst_flag = "18-33"
         rec_num = (fcst_time - 18) // 3
-    else:
+    elif fcst_time <= 39:
         fcst_flag = "36-39"
         rec_num = (fcst_time - 36) // 3
+    elif fcst_time <= 51:
+        fcst_flag = "42-51"
+        rec_num = (fcst_time - 42) // 3
+    else:
+        fcst_flag = "54-78"
+        rec_num = (fcst_time - 54) // 3
     # ファイル名
     file_name_g2 = "Z__C_RJTD_" + str(tsel) + "_MSM_GPV_Rjp_L-pall_FH" + str(
         fcst_flag) + "_grib2.bin"

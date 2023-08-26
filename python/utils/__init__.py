@@ -98,7 +98,18 @@ def mktheta(pres, tem, rh):
 
 
 def convert_png2gif(input_filenames, delay="80", output_filename="output.gif"):
-    """convertを使い、pngからgifアニメーションに変換する"""
+    """convertを使い、pngからgifアニメーションに変換する
+
+    Parameters:
+    ----------
+    input_filenames: list of str
+        入力ファイルのリスト
+    delay: int
+        アニメーションを切り替える間隔
+    output_filename: str
+        出力ファイル
+    ----------
+    """
     args = ["convert", "-delay", delay]
     args.extend(input_filenames)
     args.append(output_filename)
@@ -113,10 +124,23 @@ def convert_png2gif(input_filenames, delay="80", output_filename="output.gif"):
 
 def convert_png2mp4(
         input_file="input_%02d.png",
-        pfrate="1",  # framerate of input pictures (files/s)
-        mfrate="30",  # movie framerate for output (fps)
+        pfrate="1",
+        mfrate="30",
         output_filename="output.mp4"):
-    """convertを使い、pngからmp4アニメーションに変換する"""
+    """ffmpegを使い、pngからgifアニメーションに変換する
+
+    Parameters:
+    ----------
+    input_file: str
+        入力ファイルのパターン
+    pfrate: int
+        framerate of input pictures (files/s)
+    mfrate: int
+        movie framerate for output (fps)
+    output_filename: str
+        出力ファイル
+    ----------
+    """
     args = [
         "ffmpeg", "-f", "image2", "-framerate", pfrate, "-i", input_file, "-r",
         mfrate, "-an", "-vcodec", "libx264", "-pix_fmt", "yuv420p"
